@@ -438,17 +438,19 @@ class LastFM(callbacks.Plugin):
             irc.error(str(e))
     track = wrap(track, [optional('text')])
     
-    def setusername(self, irc, msg, args, nick, username):
-        """[<nick>] <Last.FM username>
+    def setusername(self, irc, msg, args, username, nick):
+        """<Last.FM username> [<nick>]
         
         Saves your (or someone else's, if <nick> is provided) Last.FM
         username."""
-        if nick != None:
-            db.add(nick, username)
-        else:
-            db.add(msg.nick, username)
+        if (nick != None) and (username == ""):
+            username = nick
+            nick = None
+        if nick == None:
+            nick = msg.nick
+        db.add(nick, username)
         irc.reply("Okay.")
-    setusername = wrap(setusername, [optional('seenNick'), 'text'])
+    setusername = wrap(setusername, ['text', optional('seenNick')])
     
     def getusername(self, irc, msg, args):
         """takes no arguments
