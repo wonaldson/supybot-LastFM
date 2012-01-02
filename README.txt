@@ -9,4 +9,6 @@ Then load the plugin.
 
 LICENSES
 
-PyLast is Copyright (C) 2008-2010 Amr Hassan and is used according to the terms of the Apache 2.0 License. The latest version can be found at http://code.google.com/p/pylast/.
+PyLast (located in pylast.py) is Copyright (C) 2008-2010 Amr Hassan and is used according to the terms of the Apache 2.0 License. The latest version can be found at http://code.google.com/p/pylast/.
+
+The rest of the code and text found in this plugin is Copyright (c) 2010-2011 William Donaldson and is licensed under the "do whatever the fuck you want" license. The terms of the license are "do whatever the fuck you want". If you use the plugin, I'd love to hear from you. Direct any inquiries to supybotplugins@biiaru.net.
