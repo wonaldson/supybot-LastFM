@@ -49,6 +49,9 @@ class YouAreAnIdiotError(Exception):
 class IncorrectPeriodError(Exception):
     pass
 
+# I would be lying if I said I knew how this DB code works. I wrote it so long
+# ago and never commented it. Oops.
+
 class LastFMRecord(dbi.Record):
     __fields__ = [
         'ircuser',
@@ -119,6 +122,7 @@ def getNetworkObject(API_KEY, API_SECRET):
     network = None
     try:
         network = pylast.get_lastfm_network(api_key = API_KEY, api_secret = API_SECRET)
+        network.enable_caching() # enables caching for certain calls (see pylast.py)
     except pylast.WSError, e:
         irc.error("Houston, we have a problem. %s" % e.get_id())
     return network
@@ -227,6 +231,23 @@ class LastFM(callbacks.Plugin):
         except pylast.WSError, e:
             irc.error(str(e))
     similar = wrap(similar, ['text'])
+    
+    def bio(self, irc, msg, args, artist):
+        """<artist>
+        
+        Returns a summary of Last.FM's biography of the artist."""
+        try:
+            artistInstance = network.get_artist(artist)
+            summary = artistInstance.get_bio_summary()
+            if summary != None and summary != "":
+                summary = re.sub("\<[^<]+\>", "", summary)
+                summary = re.sub("\s+", " ", summary)
+            else:
+                irc.error("No bio is available for this artist.")
+            irc.reply(summary.encode('utf-8'))
+        except pylast.WSError, e:
+            irc.error(str(e))
+    bio = wrap(bio, ['text'])
     
     def artist(self, irc, msg, args, artist):
         """[<artist>]
